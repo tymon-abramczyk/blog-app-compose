@@ -72,4 +72,7 @@ dependencies {
 
     // Kotlin Coroutines
     implementation(libs.kotlinx.coroutines.core)
+
+    // Biometric authentication
+    implementation(libs.androidx.biometric.ktx)
 }
