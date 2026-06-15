@@ -19,25 +19,13 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContent {
             BlogAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MainComposable(modifier = Modifier.padding(innerPadding))
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    NavGraph()
                 }
             }
         }
-    }
-}
-
-@Composable
-fun MainComposable(modifier: Modifier = Modifier) {
-    Box(modifier = modifier.fillMaxSize()) {
-        NavGraph()
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MainComposablePreview() {
-    BlogAppTheme {
-        MainComposable()
     }
 }
