@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.blogapp.data.model.Post
 import com.example.blogapp.data.repository.BlogRepository
+import com.example.blogapp.util.ConnectivityObserver
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +19,8 @@ sealed class PostListUiState {
 }
 
 class PostListViewModel(
-    private val repository: BlogRepository
+    private val repository: BlogRepository,
+    private val connectivityObserver: ConnectivityObserver,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<PostListUiState>(PostListUiState.Loading)
@@ -27,8 +29,12 @@ class PostListViewModel(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
 
+    private val _isOffline = MutableStateFlow(false)
+    val isOffline: StateFlow<Boolean> = _isOffline.asStateFlow()
+
     init {
         loadPosts()
+        observeConnectivity()
         viewModelScope.launch {
             if (repository.getAllPosts().firstOrNull().isNullOrEmpty()) {
                 refreshPosts()
@@ -58,6 +64,14 @@ class PostListViewModel(
                 _uiState.value = PostListUiState.Error(e.message ?: "Failed to refresh posts")
             } finally {
                 _isRefreshing.value = false
+            }
+        }
+    }
+
+    private fun observeConnectivity() {
+        viewModelScope.launch {
+            connectivityObserver.observe().collect { isConnected ->
+                _isOffline.value = !isConnected
             }
         }
     }

@@ -19,6 +19,7 @@ import com.example.blogapp.ui.post.viewmodel.PostListViewModel
 import com.example.blogapp.ui.post.viewmodel.factory.PostAddViewModelFactory
 import com.example.blogapp.ui.post.viewmodel.factory.PostDetailViewModelFactory
 import com.example.blogapp.ui.post.viewmodel.factory.PostListViewModelFactory
+import com.example.blogapp.util.ConnectivityObserver
 
 @Composable
 fun NavGraph() {
@@ -41,8 +42,9 @@ fun NavGraph() {
             )
         }
         composable(Screen.PostList.route) {
+            val connectivityObserver = ConnectivityObserver(context)
             val viewModel: PostListViewModel = viewModel(
-                factory = PostListViewModelFactory(repository)
+                factory = PostListViewModelFactory(repository, connectivityObserver)
             )
 
             PostListScreen(
