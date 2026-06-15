@@ -1,20 +1,84 @@
 package com.example.blogapp.ui.post
 
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.blogapp.ui.post.viewmodel.PostAddUiState
+import com.example.blogapp.ui.post.viewmodel.PostAddViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PostAddScreen(
-    onPostAdded: () -> Unit
+    onPostAdded: () -> Unit,
+    viewModel: PostAddViewModel,
 ) {
-    Text("Post Add Screen")
-}
+    var title by remember { mutableStateOf("") }
+    var body by remember { mutableStateOf("") }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-@Preview(showBackground = true)
-@Composable
-fun PostAddScreenPreview() {
-    PostAddScreen(
-        onPostAdded = {}
-    )
+    LaunchedEffect(Unit) {
+        viewModel.resetState()
+    }
+
+    LaunchedEffect(uiState) {
+        if (uiState is PostAddUiState.Success) {
+            onPostAdded()
+        }
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Add New Post") }
+            )
+        },
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            OutlinedTextField(
+                value = title,
+                onValueChange = { title = it },
+                label = { Text("Title") },
+                isError = uiState is PostAddUiState.Error && title.isBlank(),
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = body,
+                onValueChange = { body = it },
+                label = { Text("Body") },
+                isError = uiState is PostAddUiState.Error && body.isBlank(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+            )
+            if (uiState is PostAddUiState.Error) {
+                Text(
+                    text = (uiState as PostAddUiState.Error).message,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+            Button(
+                onClick = { viewModel.addPost(title, body, onPostAdded) },
+                enabled = uiState !is PostAddUiState.Loading,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (uiState is PostAddUiState.Loading) {
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                } else {
+                    Text("Submit")
+                }
+            }
+        }
+    }
 }
