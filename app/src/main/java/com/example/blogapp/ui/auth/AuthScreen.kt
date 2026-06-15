@@ -24,8 +24,6 @@ fun AuthScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val executor = ContextCompat.getMainExecutor(context)
 
-//    var isAuthenticating by remember { mutableStateOf(false) }
-//    var errorMessage by remember { mutableStateOf<String?>(null) }
     var authState by remember { mutableStateOf<AuthState>(AuthState.Idle) }
 
     val biometricManager = BiometricManager.from(context)
