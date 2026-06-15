@@ -1,17 +1,18 @@
-package com.example.blogapp.ui.post.viewmodel.factory
+package com.example.blogapp.ui.post.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.blogapp.data.repository.BlogRepository
-import com.example.blogapp.ui.post.viewmodel.PostAddViewModel
+import com.example.blogapp.util.ConnectivityObserver
 
-class PostAddViewModelFactory(
+class PostListViewModelFactory(
     private val repository: BlogRepository,
+    private val connectivityObserver: ConnectivityObserver,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(PostAddViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(PostListViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return PostAddViewModel(repository) as T
+            return PostListViewModel(repository, connectivityObserver) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

@@ -1,4 +1,4 @@
-package com.example.blogapp.ui.post
+package com.example.blogapp.ui.post.list
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,8 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.blogapp.data.model.Post
-import com.example.blogapp.ui.post.viewmodel.PostListUiState
-import com.example.blogapp.ui.post.viewmodel.PostListViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

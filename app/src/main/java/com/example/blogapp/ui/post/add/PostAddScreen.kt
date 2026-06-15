@@ -1,4 +1,4 @@
-package com.example.blogapp.ui.post
+package com.example.blogapp.ui.post.add
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -8,8 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.blogapp.ui.post.viewmodel.PostAddUiState
-import com.example.blogapp.ui.post.viewmodel.PostAddViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

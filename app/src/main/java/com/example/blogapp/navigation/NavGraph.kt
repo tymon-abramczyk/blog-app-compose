@@ -10,15 +10,15 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.blogapp.BlogApp
 import com.example.blogapp.ui.auth.AuthScreen
-import com.example.blogapp.ui.post.PostAddScreen
-import com.example.blogapp.ui.post.PostDetailScreen
-import com.example.blogapp.ui.post.PostListScreen
-import com.example.blogapp.ui.post.viewmodel.PostAddViewModel
-import com.example.blogapp.ui.post.viewmodel.PostDetailViewModel
-import com.example.blogapp.ui.post.viewmodel.PostListViewModel
-import com.example.blogapp.ui.post.viewmodel.factory.PostAddViewModelFactory
-import com.example.blogapp.ui.post.viewmodel.factory.PostDetailViewModelFactory
-import com.example.blogapp.ui.post.viewmodel.factory.PostListViewModelFactory
+import com.example.blogapp.ui.post.add.PostAddScreen
+import com.example.blogapp.ui.post.add.PostAddViewModel
+import com.example.blogapp.ui.post.add.PostAddViewModelFactory
+import com.example.blogapp.ui.post.detail.PostDetailScreen
+import com.example.blogapp.ui.post.detail.PostDetailViewModel
+import com.example.blogapp.ui.post.detail.PostDetailViewModelFactory
+import com.example.blogapp.ui.post.list.PostListScreen
+import com.example.blogapp.ui.post.list.PostListViewModel
+import com.example.blogapp.ui.post.list.PostListViewModelFactory
 import com.example.blogapp.util.ConnectivityObserver
 
 @Composable

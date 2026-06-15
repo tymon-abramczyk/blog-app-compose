@@ -1,4 +1,4 @@
-package com.example.blogapp.ui.post
+package com.example.blogapp.ui.post.detail
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -9,8 +9,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.blogapp.ui.post.viewmodel.PostDetailUiState
-import com.example.blogapp.ui.post.viewmodel.PostDetailViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

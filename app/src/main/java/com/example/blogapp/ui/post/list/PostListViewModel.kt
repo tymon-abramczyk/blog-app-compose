@@ -1,4 +1,4 @@
-package com.example.blogapp.ui.post.viewmodel
+package com.example.blogapp.ui.post.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
