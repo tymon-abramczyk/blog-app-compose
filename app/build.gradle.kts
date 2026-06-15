@@ -76,4 +76,7 @@ dependencies {
 
     // Biometric authentication
     implementation(libs.androidx.biometric.ktx)
+
+    // Navigation (Compose)
+    implementation(libs.androidx.navigation.compose)
 }

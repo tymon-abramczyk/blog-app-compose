@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.blogapp.navigation.NavGraph
 import com.example.blogapp.ui.auth.AuthScreen
 import com.example.blogapp.ui.theme.BlogAppTheme
 
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MainComposable(modifier: Modifier = Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
-        AuthScreen(onAuthenticationSuccess = {})
+        NavGraph()
     }
 }
 
