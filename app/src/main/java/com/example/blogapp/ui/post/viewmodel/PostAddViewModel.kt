@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 sealed class PostAddUiState {
     object Idle : PostAddUiState()
@@ -36,7 +38,12 @@ class PostAddViewModel(
                 _uiState.value = PostAddUiState.Success(result.getOrNull()!!)
                 onSuccess()
             } else {
-                _uiState.value = PostAddUiState.Error("Failed to add post")
+                val errorMsg = when (val e = result.exceptionOrNull()) {
+                    is UnknownHostException -> "No internet connection"
+                    is SocketTimeoutException -> "Network timeout"
+                    else -> e?.message ?: "Failed to add post"
+                }
+                _uiState.value = PostAddUiState.Error(errorMsg)
             }
         }
     }

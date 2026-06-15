@@ -5,11 +5,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.blogapp.ui.post.viewmodel.PostDetailUiState
 import com.example.blogapp.ui.post.viewmodel.PostDetailViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -20,11 +22,17 @@ fun PostDetailScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showDeleteDialog by remember { mutableStateOf(false) }
 
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Post Details") }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { padding ->
         Box(
@@ -70,6 +78,7 @@ fun PostDetailScreen(
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
                             text = "Error: ${(uiState as PostDetailUiState.Error).message}",
+                            textAlign = TextAlign.Center,
                             color = MaterialTheme.colorScheme.error
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -91,7 +100,14 @@ fun PostDetailScreen(
                 TextButton(
                     onClick = {
                         showDeleteDialog = false
-                        viewModel.deletePost(onSuccess = onDelete)
+                        viewModel.deletePost(
+                            onSuccess = onDelete,
+                            onFailure = { errorMsg ->
+                                scope.launch {
+                                    snackbarHostState.showSnackbar("Failed to delete post: $errorMsg")
+                                }
+                            }
+                        )
                     }
                 ) {
                     Text("Delete", color = MaterialTheme.colorScheme.error)

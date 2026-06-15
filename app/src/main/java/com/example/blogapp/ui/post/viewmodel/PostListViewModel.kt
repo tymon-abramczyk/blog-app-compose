@@ -4,12 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.blogapp.data.model.Post
 import com.example.blogapp.data.repository.BlogRepository
+import com.example.blogapp.util.ConnectivityObserver
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 sealed class PostListUiState {
     object Loading : PostListUiState()
@@ -18,7 +20,8 @@ sealed class PostListUiState {
 }
 
 class PostListViewModel(
-    private val repository: BlogRepository
+    private val repository: BlogRepository,
+    private val connectivityObserver: ConnectivityObserver,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<PostListUiState>(PostListUiState.Loading)
@@ -27,12 +30,14 @@ class PostListViewModel(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
 
+    private val _isOffline = MutableStateFlow(false)
+    val isOffline: StateFlow<Boolean> = _isOffline.asStateFlow()
+
     init {
         loadPosts()
+        observeConnectivity()
         viewModelScope.launch {
-            if (repository.getAllPosts().firstOrNull().isNullOrEmpty()) {
-                refreshPosts()
-            }
+            refreshPosts()
         }
     }
 
@@ -49,15 +54,33 @@ class PostListViewModel(
         }
     }
 
-    fun refreshPosts() {
+    fun refreshPosts(onFailure: (String) -> Unit = {}) {
         viewModelScope.launch {
             _isRefreshing.value = true
             try {
                 repository.refreshPosts()
             } catch (e: Exception) {
-                _uiState.value = PostListUiState.Error(e.message ?: "Failed to refresh posts")
+                when (e) {
+                    is UnknownHostException -> {
+                        onFailure("No internet connection")
+                    }
+                    is SocketTimeoutException -> {
+                        onFailure("Network timeout")
+                    }
+                    else -> {
+                        _uiState.value = PostListUiState.Error(e.message ?: "Failed to refresh posts")
+                    }
+                }
             } finally {
                 _isRefreshing.value = false
+            }
+        }
+    }
+
+    private fun observeConnectivity() {
+        viewModelScope.launch {
+            connectivityObserver.observe().collect { isConnected ->
+                _isOffline.value = !isConnected
             }
         }
     }
