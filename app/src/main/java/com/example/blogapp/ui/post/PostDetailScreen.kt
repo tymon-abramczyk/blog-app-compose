@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun PostDetailScreen(
     onDelete: () -> Unit,
-    viewModel: PostDetailViewModel
+    viewModel: PostDetailViewModel,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -56,18 +56,18 @@ fun PostDetailScreen(
                         Text(
                             text = post.title,
                             fontSize = 24.sp,
-                            style = MaterialTheme.typography.headlineSmall
+                            style = MaterialTheme.typography.headlineSmall,
                         )
                         Text(
                             text = post.body,
                             fontSize = 16.sp,
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.bodyLarge,
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         Button(
                             onClick = { showDeleteDialog = true },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.error
+                                containerColor = MaterialTheme.colorScheme.error,
                             )
                         ) {
                             Text("Delete Post")
@@ -79,7 +79,7 @@ fun PostDetailScreen(
                         Text(
                             text = "Error: ${(uiState as PostDetailUiState.Error).message}",
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.error
+                            color = MaterialTheme.colorScheme.error,
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(onClick = { onDelete() }) {
@@ -108,7 +108,7 @@ fun PostDetailScreen(
                                 }
                             }
                         )
-                    }
+                    },
                 ) {
                     Text("Delete", color = MaterialTheme.colorScheme.error)
                 }
@@ -117,7 +117,7 @@ fun PostDetailScreen(
                 TextButton(onClick = { showDeleteDialog = false }) {
                     Text("Cancel")
                 }
-            }
+            },
         )
     }
 }

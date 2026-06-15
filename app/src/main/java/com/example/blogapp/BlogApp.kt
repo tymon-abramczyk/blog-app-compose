@@ -17,7 +17,7 @@ class BlogApp : Application() {
         database = PostDatabase.getInstance(this)
         repository = BlogRepository(
             postDao = database.postDao(),
-            apiService = RetrofitInstance.api
+            apiService = RetrofitInstance.api,
         )
     }
 }

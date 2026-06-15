@@ -51,7 +51,7 @@ class PostDetailViewModel(
 
     fun deletePost(
         onSuccess: () -> Unit,
-        onFailure: (String) -> Unit = {}
+        onFailure: (String) -> Unit = {},
     ) {
         viewModelScope.launch {
             _uiState.value = PostDetailUiState.Loading

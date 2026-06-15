@@ -55,7 +55,7 @@ fun AuthScreen(
                     super.onAuthenticationFailed()
                     authState = AuthState.Error("Authentication failed. Please try again.")
                 }
-            }
+            },
         )
     }
 
@@ -77,23 +77,23 @@ fun AuthScreen(
 
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(
                 text = "Blog App",
                 fontSize = 32.sp,
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineMedium,
             )
             if (!canAuthenticate) {
                 Text(
                     text = "Biometric authentication is not available on this device.\nPlease set up fingerprint/PIN in system settings.",
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             } else {
                 when(authState) {
@@ -107,7 +107,7 @@ fun AuthScreen(
                             text = errorString,
                             textAlign = TextAlign.Center,
                             color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodySmall,
                         )
                         Button(onClick = {
                             authState = AuthState.Authenticating
@@ -120,7 +120,7 @@ fun AuthScreen(
                         Text(
                             text = "Authentication successful!",
                             color = MaterialTheme.colorScheme.primary,
-                            style = MaterialTheme.typography.bodySmall
+                            style = MaterialTheme.typography.bodySmall,
                         )
                     }
                     else -> {}

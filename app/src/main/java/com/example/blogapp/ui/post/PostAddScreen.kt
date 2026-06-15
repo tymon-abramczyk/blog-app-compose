@@ -67,7 +67,7 @@ fun PostAddScreen(
                     text = (uiState as PostAddUiState.Error).message,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
                 )
             }
             Button(

@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 fun PostListScreen(
     onPostClick: (Int) -> Unit,
     onAddPostClick: () -> Unit,
-    viewModel: PostListViewModel
+    viewModel: PostListViewModel,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
@@ -133,7 +133,7 @@ fun PostListScreen(
                         Text(
                             text = "Error: ${(uiState as PostListUiState.Error).message}",
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.error
+                            color = MaterialTheme.colorScheme.error,
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(onClick = refreshPosts()) {

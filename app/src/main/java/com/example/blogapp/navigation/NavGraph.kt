@@ -30,7 +30,7 @@ fun NavGraph() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Auth.route
+        startDestination = Screen.Auth.route,
     ) {
         composable(Screen.Auth.route) {
             AuthScreen(
@@ -38,13 +38,13 @@ fun NavGraph() {
                     navController.navigate(Screen.PostList.route) {
                         popUpTo(Screen.Auth.route) { inclusive = true }
                     }
-                }
+                },
             )
         }
         composable(Screen.PostList.route) {
             val connectivityObserver = ConnectivityObserver(context)
             val viewModel: PostListViewModel = viewModel(
-                factory = PostListViewModelFactory(repository, connectivityObserver)
+                factory = PostListViewModelFactory(repository, connectivityObserver),
             )
 
             PostListScreen(
@@ -54,7 +54,7 @@ fun NavGraph() {
                 onAddPostClick = {
                     navController.navigate(Screen.PostAdd.route)
                 },
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
         composable(
@@ -63,26 +63,26 @@ fun NavGraph() {
         ) { backStackEntry ->
             val postId = backStackEntry.arguments?.getInt("postId") ?: return@composable
             val viewModel: PostDetailViewModel = viewModel(
-                factory = PostDetailViewModelFactory(repository, postId)
+                factory = PostDetailViewModelFactory(repository, postId),
             )
 
             PostDetailScreen(
                 onDelete = {
                     navController.popBackStack()
                 },
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
         composable(Screen.PostAdd.route) {
             val viewModel: PostAddViewModel = viewModel(
-                factory = PostAddViewModelFactory(repository)
+                factory = PostAddViewModelFactory(repository),
             )
 
             PostAddScreen(
                 onPostAdded = {
                     navController.popBackStack()
                 },
-                viewModel = viewModel
+                viewModel = viewModel,
             )
         }
     }

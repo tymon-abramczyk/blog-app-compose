@@ -19,7 +19,7 @@ sealed class PostAddUiState {
 }
 
 class PostAddViewModel(
-    private val repository: BlogRepository
+    private val repository: BlogRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<PostAddUiState>(PostAddUiState.Loading)
