@@ -13,8 +13,10 @@ import com.example.blogapp.ui.auth.AuthScreen
 import com.example.blogapp.ui.post.PostAddScreen
 import com.example.blogapp.ui.post.PostDetailScreen
 import com.example.blogapp.ui.post.PostListScreen
+import com.example.blogapp.ui.post.viewmodel.PostAddViewModel
 import com.example.blogapp.ui.post.viewmodel.PostDetailViewModel
 import com.example.blogapp.ui.post.viewmodel.PostListViewModel
+import com.example.blogapp.ui.post.viewmodel.factory.PostAddViewModelFactory
 import com.example.blogapp.ui.post.viewmodel.factory.PostDetailViewModelFactory
 import com.example.blogapp.ui.post.viewmodel.factory.PostListViewModelFactory
 
@@ -70,10 +72,15 @@ fun NavGraph() {
             )
         }
         composable(Screen.PostAdd.route) {
+            val viewModel: PostAddViewModel = viewModel(
+                factory = PostAddViewModelFactory(repository)
+            )
+
             PostAddScreen(
                 onPostAdded = {
                     navController.popBackStack()
-                }
+                },
+                viewModel = viewModel
             )
         }
     }
