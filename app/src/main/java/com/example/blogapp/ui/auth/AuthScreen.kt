@@ -14,14 +14,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.compose.LocalLifecycleOwner
 
 @Composable
 fun AuthScreen(
     onAuthenticationSuccess: () -> Unit
 ) {
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
     val executor = ContextCompat.getMainExecutor(context)
 
     var authState by remember { mutableStateOf<AuthState>(AuthState.Idle) }
