@@ -12,10 +12,13 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.blogapp.R
 import com.example.blogapp.data.model.Post
 import kotlinx.coroutines.launch
 
@@ -31,13 +34,14 @@ fun PostListScreen(
     val isOffline by viewModel.isOffline.collectAsStateWithLifecycle()
     val pullRefreshState = rememberPullToRefreshState()
 
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     fun refreshPosts(): () -> Unit = {
         viewModel.refreshPosts(onFailure = { errorMsg ->
             scope.launch {
-                snackbarHostState.showSnackbar("Failed to refresh: $errorMsg")
+                snackbarHostState.showSnackbar(context.getString(R.string.post_list_refresh_failed, errorMsg))
             }
         })
     }
@@ -45,12 +49,12 @@ fun PostListScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Blog Posts") },
+                title = { Text(stringResource(R.string.post_list_title)) },
             )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = onAddPostClick) {
-                Icon(Icons.Default.Add, contentDescription = "Add Post")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.post_list_add))
             }
         },
         snackbarHost = {
@@ -82,7 +86,7 @@ fun PostListScreen(
                                         .fillParentMaxSize()
                                         .padding(32.dp)
                                 ) {
-                                    Text("No posts available.\nPull refresh or add a new post.")
+                                    Text(stringResource(R.string.post_list_empty))
                                 }
                             }
                         } else {
@@ -106,13 +110,13 @@ fun PostListScreen(
                                                     tint = MaterialTheme.colorScheme.onErrorContainer,
                                                 )
                                                 Text(
-                                                    text = "You are in offline mode",
+                                                    text = stringResource(R.string.post_list_offline_mode),
                                                     style = MaterialTheme.typography.titleMedium,
                                                     color = MaterialTheme.colorScheme.onErrorContainer,
                                                 )
                                             }
                                             Text(
-                                                text = "You will only see cached posts. Pull to refresh when you're back online.",
+                                                text = stringResource(R.string.post_list_offline_mode_explanation),
                                                 style = MaterialTheme.typography.bodyMedium,
                                                 color = MaterialTheme.colorScheme.onErrorContainer,
                                             )
@@ -129,13 +133,13 @@ fun PostListScreen(
                 is PostListUiState.Error -> {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "Error: ${(uiState as PostListUiState.Error).message}",
+                            text = stringResource(R.string.post_list_error, (uiState as PostListUiState.Error).message),
                             textAlign = TextAlign.Center,
                             color = MaterialTheme.colorScheme.error,
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(onClick = refreshPosts()) {
-                            Text("Retry")
+                            Text(stringResource(R.string.post_list_retry))
                         }
                     }
                 }

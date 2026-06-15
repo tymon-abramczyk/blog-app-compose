@@ -1,3 +1,52 @@
 <resources>
     <string name="app_name">Blog App</string>
+
+    <!--  Authentication  -->
+    <string name="authentication_prompt_title">Authenticate</string>
+    <string name="authentication_prompt_subtitle">Authenticate to access the app</string>
+    <string name="authentication_prompt_description">Use fingerprint, face or PIN to continue</string>
+    <string name="authentication_in_progress">Authenticating...</string>
+    <string name="authentication_successful">Authentication successful!</string>
+    <string name="authentication_unavailable">Biometric authentication is not available on this device.\nPlease set up fingerprint/PIN in system settings.</string>
+    <string name="authentication_error">Authentication error: %1$s</string>
+    <string name="authentication_failed">Authentication failed. Please try again.</string>
+    <string name="authentication_retry">Retry</string>
+
+    <!--  Post list screen  -->
+    <string name="post_list_title">Blog posts</string>
+    <string name="post_list_add">Add post</string>
+    <string name="post_list_empty">No posts available.\nPull refresh or add a new post.</string>
+    <string name="post_list_offline_mode">You are in offline mode</string>
+    <string name="post_list_offline_mode_explanation">You will only see cached posts. Pull to refresh when you\'re back online.</string>
+    <string name="post_list_refresh_failed">Failed to refresh: %1$d</string>
+    <string name="post_list_error">Error: %1$s</string>
+    <string name="post_list_load_error">%1$s</string>
+    <string name="post_list_retry">Retry</string>
+
+    <!--  Post detail screen  -->
+    <string name="post_detail_load_failed">Failed to load post: %1$s</string>
+    <string name="post_detail_title">Post details</string>
+    <string name="post_detail_delete_post">Delete</string>
+    <string name="post_detail_delete_dialog_title">Delete post</string>
+    <string name="post_detail_delete_dialog_text">Are you sure you want to delete this post? This action cannot be undone.</string>
+    <string name="post_detail_delete_dialog_confirm">Delete</string>
+    <string name="post_detail_delete_dialog_cancel">Cancel</string>
+    <string name="post_detail_delete_failed">Failed to delete post: %1$d</string>
+    <string name="post_detail_delete_error">%1$s</string>
+    <string name="post_detail_error">Error: %1$s</string>
+    <string name="post_detail_error_not_found">Post not found</string>
+    <string name="post_detail_go_back">Go back</string>
+
+    <!--  Post add screen  -->
+    <string name="post_add_title">Add new post</string>
+    <string name="post_add_post_title">Title</string>
+    <string name="post_add_post_body">Body</string>
+    <string name="post_add_submit">Submit</string>
+    <string name="post_add_error">%1$s</string>
+    <string name="post_add_error_empty">Title and body cannot be empty</string>
+    <string name="post_add_error_generic">Failed to add post</string>
+
+    <!--  Error messages  -->
+    <string name="error_no_internet">No internet connection</string>
+    <string name="error_network_timeout">Network timeout</string>
 </resources>

@@ -5,10 +5,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.blogapp.R
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -20,13 +23,14 @@ fun PostDetailScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showDeleteDialog by remember { mutableStateOf(false) }
 
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Post Details") }
+                title = { Text(stringResource(R.string.post_detail_title)) }
             )
         },
         snackbarHost = {
@@ -68,20 +72,23 @@ fun PostDetailScreen(
                                 containerColor = MaterialTheme.colorScheme.error,
                             )
                         ) {
-                            Text("Delete Post")
+                            Text(stringResource(R.string.post_detail_delete_post))
                         }
                     }
                 }
                 is PostDetailUiState.Error -> {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "Error: ${(uiState as PostDetailUiState.Error).message}",
+                            text = stringResource(
+                                R.string.post_detail_error,
+                                (uiState as PostDetailUiState.Error).message
+                            ),
                             textAlign = TextAlign.Center,
                             color = MaterialTheme.colorScheme.error,
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(onClick = { onDelete() }) {
-                            Text("Go Back")
+                            Text(stringResource(R.string.post_detail_go_back))
                         }
                     }
                 }
@@ -92,8 +99,8 @@ fun PostDetailScreen(
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("Delete Post") },
-            text = { Text("Are you sure you want to delete this post? This action cannot be undone.") },
+            title = { Text(stringResource(R.string.post_detail_delete_dialog_title)) },
+            text = { Text(stringResource(R.string.post_detail_delete_dialog_text)) },
             confirmButton = {
                 TextButton(
                     onClick = {
@@ -102,18 +109,21 @@ fun PostDetailScreen(
                             onSuccess = onDelete,
                             onFailure = { errorMsg ->
                                 scope.launch {
-                                    snackbarHostState.showSnackbar("Failed to delete post: $errorMsg")
+                                    snackbarHostState.showSnackbar(context.getString(R.string.post_detail_delete_failed, errorMsg))
                                 }
                             }
                         )
                     },
                 ) {
-                    Text("Delete", color = MaterialTheme.colorScheme.error)
+                    Text(
+                        text = stringResource(R.string.post_detail_delete_dialog_confirm),
+                        color = MaterialTheme.colorScheme.error,
+                    )
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.post_detail_delete_dialog_cancel))
                 }
             },
         )

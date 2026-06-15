@@ -8,12 +8,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import com.example.blogapp.R
 
 @Composable
 fun AuthScreen(
@@ -46,12 +48,12 @@ fun AuthScreen(
 
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
-                    authState = AuthState.Error("Authentication error: $errString")
+                    authState = AuthState.Error(context.getString(R.string.authentication_error, errString))
                 }
 
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
-                    authState = AuthState.Error("Authentication failed. Please try again.")
+                    authState = AuthState.Error(context.getString(R.string.authentication_failed))
                 }
             },
         )
@@ -59,9 +61,8 @@ fun AuthScreen(
 
     val promptInfo = remember {
         BiometricPrompt.PromptInfo.Builder()
-            .setTitle("Authenticate")
-            .setSubtitle("Log in to access your blog posts")
-            .setDescription("Use fingerprint, face or PIN to continue")
+            .setTitle(context.getString(R.string.authentication_prompt_title))
+            .setSubtitle(context.getString(R.string.authentication_prompt_subtitle))
             .setAllowedAuthenticators(authenticators)
             .build()
     }
@@ -82,13 +83,13 @@ fun AuthScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(
-                text = "Blog App",
+                text = stringResource(R.string.app_name),
                 fontSize = 32.sp,
                 style = MaterialTheme.typography.headlineMedium,
             )
             if (!canAuthenticate) {
                 Text(
-                    text = "Biometric authentication is not available on this device.\nPlease set up fingerprint/PIN in system settings.",
+                    text = stringResource(R.string.authentication_unavailable),
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodyMedium,
@@ -97,7 +98,7 @@ fun AuthScreen(
                 when(authState) {
                     is AuthState.Authenticating -> {
                         CircularProgressIndicator()
-                        Text(text = "Authenticating...")
+                        Text(stringResource(R.string.authentication_in_progress))
                     }
                     is AuthState.Error -> {
                         val errorString = (authState as AuthState.Error).error
@@ -111,12 +112,12 @@ fun AuthScreen(
                             authState = AuthState.Authenticating
                             biometricPrompt.authenticate(promptInfo)
                         }) {
-                            Text("Retry")
+                            Text(stringResource(R.string.authentication_retry))
                         }
                     }
                     is AuthState.Success -> {
                         Text(
-                            text = "Authentication successful!",
+                            text = stringResource(R.string.authentication_successful),
                             color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.bodySmall,
                         )
