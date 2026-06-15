@@ -1,9 +1,8 @@
-package com.example.blogapp.ui.post.viewmodel.factory
+package com.example.blogapp.ui.post.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.blogapp.data.repository.BlogRepository
-import com.example.blogapp.ui.post.viewmodel.PostDetailViewModel
 
 class PostDetailViewModelFactory(
     private val repository: BlogRepository,

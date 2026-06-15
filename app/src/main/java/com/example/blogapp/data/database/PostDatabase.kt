@@ -10,7 +10,7 @@ import com.example.blogapp.data.model.dao.PostDao
 @Database(
     entities = [Post::class],
     version = 1,
-    exportSchema = false
+    exportSchema = false,
 )
 abstract class PostDatabase : RoomDatabase() {
 
@@ -25,7 +25,7 @@ abstract class PostDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     PostDatabase::class.java,
-                    "post_database"
+                    "post_database",
                 ).build()
                 INSTANCE = instance
                 instance

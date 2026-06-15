@@ -1,7 +1,8 @@
-package com.example.blogapp.ui.post.viewmodel
+package com.example.blogapp.ui.post.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.blogapp.R
 import com.example.blogapp.data.model.Post
 import com.example.blogapp.data.repository.BlogRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +15,7 @@ import java.net.UnknownHostException
 sealed class PostDetailUiState {
     object Loading : PostDetailUiState()
     data class Success(val post: Post) : PostDetailUiState()
-    data class Error(val message: String) : PostDetailUiState()
+    data class Error(val messageRes: Int, val message: String = "") : PostDetailUiState()
 }
 
 class PostDetailViewModel(
@@ -41,17 +42,17 @@ class PostDetailViewModel(
                     _uiState.value = PostDetailUiState.Success(post)
                     cachedPost.value = post
                 } else {
-                    _uiState.value = PostDetailUiState.Error("Post not found")
+                    _uiState.value = PostDetailUiState.Error(R.string.post_detail_error_not_found)
                 }
             } catch (e: Exception) {
-                _uiState.value = PostDetailUiState.Error("Failed to load post: ${e.message}")
+                _uiState.value = PostDetailUiState.Error(R.string.post_detail_load_failed, e.message ?: "Unknown error")
             }
         }
     }
 
     fun deletePost(
         onSuccess: () -> Unit,
-        onFailure: (String) -> Unit = {}
+        onFailure: (Int) -> Unit = {},
     ) {
         viewModelScope.launch {
             _uiState.value = PostDetailUiState.Loading
@@ -63,14 +64,14 @@ class PostDetailViewModel(
                 when (val e = result.exceptionOrNull()) {
                     is UnknownHostException -> {
                         _uiState.value = PostDetailUiState.Success(cachedPost.value ?: return@launch)
-                        onFailure("No internet connection")
+                        onFailure(R.string.error_no_internet)
                     }
                     is SocketTimeoutException -> {
                         _uiState.value = PostDetailUiState.Success(cachedPost.value ?: return@launch)
-                        onFailure("Network timeout")
+                        onFailure(R.string.error_network_timeout)
                     }
                     else -> {
-                        _uiState.value = PostDetailUiState.Error(e?.message ?: "Failed to delete post")
+                        _uiState.value = PostDetailUiState.Error(R.string.post_detail_delete_error, e?.message ?: "Unknown error")
                     }
                 }
             }

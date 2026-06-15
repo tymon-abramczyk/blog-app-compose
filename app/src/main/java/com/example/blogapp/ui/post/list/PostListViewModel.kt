@@ -1,7 +1,8 @@
-package com.example.blogapp.ui.post.viewmodel
+package com.example.blogapp.ui.post.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.blogapp.R
 import com.example.blogapp.data.model.Post
 import com.example.blogapp.data.repository.BlogRepository
 import com.example.blogapp.util.ConnectivityObserver
@@ -16,7 +17,7 @@ import java.net.UnknownHostException
 sealed class PostListUiState {
     object Loading : PostListUiState()
     data class Success(val posts: List<Post>) : PostListUiState()
-    data class Error(val message: String) : PostListUiState()
+    data class Error(val messageRes: Int, val message: String = "") : PostListUiState()
 }
 
 class PostListViewModel(
@@ -46,7 +47,7 @@ class PostListViewModel(
             _uiState.value = PostListUiState.Loading
             repository.getAllPosts()
                 .catch { e ->
-                    _uiState.value = PostListUiState.Error(e.message ?: "Unknown error")
+                    _uiState.value = PostListUiState.Error(R.string.post_list_load_error, e.message ?: "Unknown error")
                 }
                 .collect { posts ->
                     _uiState.value = PostListUiState.Success(posts)
@@ -54,7 +55,7 @@ class PostListViewModel(
         }
     }
 
-    fun refreshPosts(onFailure: (String) -> Unit = {}) {
+    fun refreshPosts(onFailure: (Int) -> Unit = {}) {
         viewModelScope.launch {
             _isRefreshing.value = true
             try {
@@ -62,13 +63,13 @@ class PostListViewModel(
             } catch (e: Exception) {
                 when (e) {
                     is UnknownHostException -> {
-                        onFailure("No internet connection")
+                        onFailure(R.string.error_no_internet)
                     }
                     is SocketTimeoutException -> {
-                        onFailure("Network timeout")
+                        onFailure(R.string.error_network_timeout)
                     }
                     else -> {
-                        _uiState.value = PostListUiState.Error(e.message ?: "Failed to refresh posts")
+                        _uiState.value = PostListUiState.Error(R.string.post_list_load_error, e.message ?: "Failed to refresh posts")
                     }
                 }
             } finally {

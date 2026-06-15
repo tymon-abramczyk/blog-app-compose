@@ -8,5 +8,5 @@ data class Post(
     @PrimaryKey
     val id: Int,
     val title: String,
-    val body: String
+    val body: String,
 )
