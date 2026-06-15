@@ -13,12 +13,17 @@ import com.example.blogapp.ui.auth.AuthScreen
 import com.example.blogapp.ui.post.PostAddScreen
 import com.example.blogapp.ui.post.PostDetailScreen
 import com.example.blogapp.ui.post.PostListScreen
+import com.example.blogapp.ui.post.viewmodel.PostDetailViewModel
 import com.example.blogapp.ui.post.viewmodel.PostListViewModel
+import com.example.blogapp.ui.post.viewmodel.factory.PostDetailViewModelFactory
 import com.example.blogapp.ui.post.viewmodel.factory.PostListViewModelFactory
 
 @Composable
 fun NavGraph() {
     val navController = rememberNavController()
+    val context = LocalContext.current
+    val application = context.applicationContext as BlogApp
+    val repository = application.repository
 
     NavHost(
         navController = navController,
@@ -34,9 +39,6 @@ fun NavGraph() {
             )
         }
         composable(Screen.PostList.route) {
-            val context = LocalContext.current
-            val application = context.applicationContext as BlogApp
-            val repository = application.repository
             val viewModel: PostListViewModel = viewModel(
                 factory = PostListViewModelFactory(repository)
             )
@@ -56,11 +58,15 @@ fun NavGraph() {
             arguments = listOf(navArgument("postId") { type = NavType.IntType }),
         ) { backStackEntry ->
             val postId = backStackEntry.arguments?.getInt("postId") ?: return@composable
+            val viewModel: PostDetailViewModel = viewModel(
+                factory = PostDetailViewModelFactory(repository, postId)
+            )
+
             PostDetailScreen(
-                postId = postId,
                 onDelete = {
                     navController.popBackStack()
-                }
+                },
+                viewModel = viewModel
             )
         }
         composable(Screen.PostAdd.route) {
