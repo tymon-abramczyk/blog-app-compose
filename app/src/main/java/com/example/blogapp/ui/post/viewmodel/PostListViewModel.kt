@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 sealed class PostListUiState {
     object Loading : PostListUiState()
@@ -52,13 +54,23 @@ class PostListViewModel(
         }
     }
 
-    fun refreshPosts() {
+    fun refreshPosts(onFailure: (String) -> Unit = {}) {
         viewModelScope.launch {
             _isRefreshing.value = true
             try {
                 repository.refreshPosts()
             } catch (e: Exception) {
-                _uiState.value = PostListUiState.Error(e.message ?: "Failed to refresh posts")
+                when (e) {
+                    is UnknownHostException -> {
+                        onFailure("No internet connection")
+                    }
+                    is SocketTimeoutException -> {
+                        onFailure("Network timeout")
+                    }
+                    else -> {
+                        _uiState.value = PostListUiState.Error(e.message ?: "Failed to refresh posts")
+                    }
+                }
             } finally {
                 _isRefreshing.value = false
             }

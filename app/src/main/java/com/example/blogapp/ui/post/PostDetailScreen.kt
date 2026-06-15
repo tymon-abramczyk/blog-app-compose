@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.blogapp.ui.post.viewmodel.PostDetailUiState
 import com.example.blogapp.ui.post.viewmodel.PostDetailViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -20,11 +21,17 @@ fun PostDetailScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showDeleteDialog by remember { mutableStateOf(false) }
 
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Post Details") }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { padding ->
         Box(
@@ -91,7 +98,14 @@ fun PostDetailScreen(
                 TextButton(
                     onClick = {
                         showDeleteDialog = false
-                        viewModel.deletePost(onSuccess = onDelete)
+                        viewModel.deletePost(
+                            onSuccess = onDelete,
+                            onFailure = { errorMsg ->
+                                scope.launch {
+                                    snackbarHostState.showSnackbar("Failed to delete post: $errorMsg")
+                                }
+                            }
+                        )
                     }
                 ) {
                     Text("Delete", color = MaterialTheme.colorScheme.error)

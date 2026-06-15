@@ -18,6 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.blogapp.data.model.Post
 import com.example.blogapp.ui.post.viewmodel.PostListUiState
 import com.example.blogapp.ui.post.viewmodel.PostListViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,6 +32,17 @@ fun PostListScreen(
     val isOffline by viewModel.isOffline.collectAsStateWithLifecycle()
     val pullRefreshState = rememberPullToRefreshState()
 
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    fun refreshPosts(): () -> Unit = {
+        viewModel.refreshPosts(onFailure = { errorMsg ->
+            scope.launch {
+                snackbarHostState.showSnackbar("Failed to refresh: $errorMsg")
+            }
+        })
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -41,12 +53,15 @@ fun PostListScreen(
             FloatingActionButton(onClick = onAddPostClick) {
                 Icon(Icons.Default.Add, contentDescription = "Add Post")
             }
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) { padding ->
         PullToRefreshBox(
             state = pullRefreshState,
             isRefreshing = isRefreshing,
-            onRefresh = { viewModel.refreshPosts() },
+            onRefresh = refreshPosts(),
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxSize()
@@ -119,7 +134,7 @@ fun PostListScreen(
                             color = MaterialTheme.colorScheme.error
                         )
                         Spacer(modifier = Modifier.height(8.dp))
-                        Button(onClick = { viewModel.refreshPosts() }) {
+                        Button(onClick = refreshPosts()) {
                             Text("Retry")
                         }
                     }
