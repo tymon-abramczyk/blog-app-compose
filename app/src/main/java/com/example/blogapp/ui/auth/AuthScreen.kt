@@ -111,6 +111,12 @@ fun AuthScreen(
                             color = MaterialTheme.colorScheme.error,
                             style = MaterialTheme.typography.bodySmall
                         )
+                        Button(onClick = {
+                            authState = AuthState.Authenticating
+                            biometricPrompt.authenticate(promptInfo)
+                        }) {
+                            Text("Retry")
+                        }
                     }
                     is AuthState.Success -> {
                         Text(
