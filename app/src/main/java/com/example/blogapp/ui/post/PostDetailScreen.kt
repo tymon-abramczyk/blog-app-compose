@@ -36,10 +36,10 @@ fun PostDetailScreen(
         }
     ) { padding ->
         Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding),
-            contentAlignment = Alignment.Center
+                .padding(padding)
         ) {
             when (uiState) {
                 is PostDetailUiState.Loading -> {
@@ -48,10 +48,10 @@ fun PostDetailScreen(
                 is PostDetailUiState.Success -> {
                     val post = (uiState as PostDetailUiState.Success).post
                     Column(
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                            .padding(16.dp)
                     ) {
                         Text(
                             text = post.title,

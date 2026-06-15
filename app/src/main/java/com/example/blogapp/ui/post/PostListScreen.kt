@@ -79,10 +79,10 @@ fun PostListScreen(
                         if (posts.isEmpty()) {
                             item {
                                 Box(
+                                    contentAlignment = Alignment.Center,
                                     modifier = Modifier
                                         .fillParentMaxSize()
-                                        .padding(32.dp),
-                                    contentAlignment = Alignment.Center
+                                        .padding(32.dp)
                                 ) {
                                     Text("No posts available.\nPull refresh or add a new post.")
                                 }
@@ -91,15 +91,15 @@ fun PostListScreen(
                             if (isOffline) {
                                 item {
                                     Surface(
+                                        color = MaterialTheme.colorScheme.errorContainer,
+                                        shape = MaterialTheme.shapes.small,
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                                        color = MaterialTheme.colorScheme.errorContainer,
-                                        shape = MaterialTheme.shapes.small
+                                            .padding(horizontal = 16.dp, vertical = 8.dp)
                                     ) {
                                         Column(
-                                            modifier = Modifier.padding(16.dp),
-                                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                                            modifier = Modifier.padding(16.dp)
                                         ) {
                                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                                 Icon(
