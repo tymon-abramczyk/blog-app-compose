@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -92,6 +93,7 @@ fun AuthScreen(
             if (!canAuthenticate) {
                 Text(
                     text = "Biometric authentication is not available on this device.\nPlease set up fingerprint/PIN in system settings.",
+                    textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodyMedium
                 )
@@ -104,7 +106,8 @@ fun AuthScreen(
                     is AuthState.Error -> {
                         val errorString = (authState as AuthState.Error).error
                         Text(
-                            text = "Authentication error: $errorString",
+                            text = errorString,
+                            textAlign = TextAlign.Center,
                             color = MaterialTheme.colorScheme.error,
                             style = MaterialTheme.typography.bodySmall
                         )
